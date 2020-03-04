@@ -1,7 +1,5 @@
 package;
 
-// import tink.Cli;
-// import tink.cli.*;
 import sys.FileSystem;
 import sys.io.Process;
 using haxe.io.Path;
@@ -48,12 +46,12 @@ class Main {
         var p = runProcess(cmd, args);
         var perr = p.stderr.readAll().toString();
         if (perr != null && perr != '') {
-            trace('${cmd}.err: ${perr}');
+            trace('${cmd}.ERROR: ${perr}');
         }
         p.close();
     }
     
-	static public function main() {
+    static public function main() {
         var executablePath = Sys.args()[0];
         if (executablePath == null)
             Sys.exit(1);
