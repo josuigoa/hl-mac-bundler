@@ -5,6 +5,12 @@ import sys.io.Process;
 using haxe.io.Path;
 using StringTools;
 
+enum abstract INMPrefix(String) to String {
+    var executable_path = '@executable_path';
+    var loader_path = '@loader_path';
+    var rpath = '@rpath';
+}
+
 class Main {
     
     static var HDLL_LIBRARIES : Array<String> = [
@@ -56,12 +62,11 @@ class Main {
         if (executablePath == null)
             Sys.exit(1);
         
-        trace('executablePath: $executablePath');
         if (!executablePath.endsWith('/')) {
             executablePath += '/';
         }
         var librariesRelativeToExec = '$executablePath';
-        var p, pout, perr, depString, libPath, deps, depPath, depFile;
+        var p, pout, depString, libPath, deps, depPath, depFile;
         var regex = ~/.+?(?=dylib)/;
         for (lib in HDLL_LIBRARIES) {
             libPath = '$librariesRelativeToExec${lib}.hdll';
@@ -86,7 +91,13 @@ class Main {
 
                 depFile = '${depPath.file}.${depPath.ext}';
                 runProcessAndCheckError('cp', [depPath.toString(), '$librariesRelativeToExec$depFile']);
-                runProcessAndCheckError('install_name_tool', ['-change', '${depPath.toString()}', '@executable_path/$depFile', '$libPath']);
+                
+                // TODO test these lines one by one
+                // runProcessAndCheckError('install_name_tool', ['-id', '$executable_path/$depFile', '$librariesRelativeToExec$depFile']);
+                // runProcessAndCheckError('install_name_tool', ['-id', '$loader_path/$depFile', '$librariesRelativeToExec$depFile']);
+                // runProcessAndCheckError('install_name_tool', ['-id', '$rpath/$depFile', '$librariesRelativeToExec$depFile']);
+                
+                runProcessAndCheckError('install_name_tool', ['-change', '${depPath.toString()}', '$executable_path/$depFile', '$libPath']);
             }
         }
 	}
