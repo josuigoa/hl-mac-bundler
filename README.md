@@ -1,8 +1,8 @@
 # HashLink OSX bundler
 
-Since the HashLink VM is not very portable in OSX systems. The HL executalbe is looking for the libraries in the instalation paths even if the library is in the same folder. For example, HL will look for `libSDL2-2.0.0.dylib` in the `/usr/local/opt/sdl2/lib/` folder, where it is installed.
+The HashLink VM is not very portable in OSX systems. The HL executable is looking for the libraries in the instalation paths even if the library is in the same folder. For example, HL will look for `libSDL2-2.0.0.dylib` in the `/usr/local/opt/sdl2/lib/` folder, where it is installed.
 
-# What does this script?
+# What does this script do?
 
 * Read the libraries needed by the `hdll` files that are close to the executable
 * Copy to that folder all the `dylib` files needed.
